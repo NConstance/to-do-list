@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"; 
+import TodoList from "./components/TodoList/TodoList";
 
 export default function App() {
     const [todos, setTodos] = useState([]);
@@ -64,8 +65,8 @@ export default function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(subject)
-            })
-            const updatedTodo = await response.json()
+            });
+            const updatedTodo = await response.json();
             const completedTodosCopy = [updatedTodo,...completedTodos]
             setCompletedTodos(completedTodosCopy)
             todosCopy.splice(index, 1)
@@ -95,23 +96,15 @@ export default function App() {
 
     return (
         <div>
-            <h1>Todo List</h1>
-            Add Todo:<input type="text" value={newTodo.title} 
-            onChange={(e) => {setNewTodo({...newTodo, title: e.target.value})}}
-            onKeyDown={(e) => {e.key === 'Enter' && createTodo()}}
+            <TodoList
+            newTodo={newTodo}
+            setNewTodo={setNewTodo}
+            createTodo={createTodo}
+            todos={todos}
+            moveToCompleted={moveToCompleted}
+            completedTodos={completedTodos}
+            deleteTodo={deleteTodo}
             />
-            <h3>Todos</h3>
-            {todos.map((todo) => 
-                <div key={todo._id}>{todo.title}
-                    <button onClick={() => moveToCompleted(todo._id)}>Completed</button>
-                </div>)
-            }
-            <h3>Completed Todos</h3>
-            {completedTodos.map((todo) => 
-                <div key={todo._id}>{todo.title}
-                    <button onClick={() => deleteTodo(todo._id)}>Delete</button>
-                </div>)
-            }
         </div>
     )
 }
